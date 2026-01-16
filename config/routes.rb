@@ -1,9 +1,4 @@
 Rails.application.routes.draw do
-  get "tasks/index"
-  get "tasks/show"
-  get "tasks/new"
-  get "tasks/edit"
-  get "dashboard/index"
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -15,14 +10,7 @@ Rails.application.routes.draw do
     end
   end
 
-  devise_for :users
-
-
   namespace :admin do
-    get "users/index"
-    get "users/show"
-    get "users/new"
-    get "users/edit"
     resources :users
   end
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
