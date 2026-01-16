@@ -1,0 +1,10 @@
+<h2>My Dashboard</h2>
+
+<ul>
+  <% @tasks.each do |task| %>
+    <li>
+      <strong><%= task.title %></strong> — due <%= task.due_date %>
+      (status: <%= task.status %>)
+    </li>
+  <% end %>
+</ul>
