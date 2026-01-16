@@ -1,2 +1,16 @@
-<h1>Tasks#show</h1>
-<p>Find me in app/views/tasks/show.html.erb</p>
+<h2><%= @task.title %></h2>
+<p><%= @task.description %></p>
+<p>Due: <%= @task.due_date %></p>
+<p>Status: <%= @task.status %></p>
+
+<% if policy(@task).mark_complete? && @task.pending? %>
+  <%= link_to "Mark Complete", mark_complete_task_path(@task), method: :patch %>
+<% end %>
+
+<% if policy(@task).update? %>
+  <%= link_to "Edit", edit_task_path(@task) %>
+<% end %>
+
+<% if policy(@task).destroy? %>
+  <%= link_to "Delete", task_path(@task), method: :delete, data: { confirm: "Are you sure?" } %>
+<% end %>
