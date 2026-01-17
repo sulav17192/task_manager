@@ -1,28 +1,31 @@
 class TaskPolicy < ApplicationPolicy
+  class Scope < ApplicationPolicy::Scope
+    def resolve
+      if user.admin? || user.manager?
+        scope.all
+      else
+        scope.where(assigned_to: user)
+      end
+    end
+  end
+
   def show?
-    user_is_admin? || record.creator == user || record.assigned_to == user
+    user.admin? || user.manager? || record.assigned_to == user
   end
 
   def create?
-    user_is_admin? || user&.manager?
+    user.admin? || user.manager?
   end
 
   def update?
-    user_is_admin? || record.creator == user
+    user.admin? || user.manager? || record.assigned_to == user
   end
 
   def destroy?
-    user_is_admin? || record.creator == user
+    user.admin?
   end
 
   def mark_complete?
-    user_is_admin? || record.creator == user || record.assigned_to == user
-  end
-
-  class Scope < Struct.new(:user, :scope)
-    def resolve
-      return scope.all if user&.admin?
-      scope.where(creator: user).or(scope.where(assigned_to: user))
-    end
+    record.assigned_to == user || user.admin? || user.manager?
   end
 end

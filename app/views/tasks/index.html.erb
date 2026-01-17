@@ -1,15 +1,44 @@
-<h2>Tasks</h2>
+<h1>Tasks</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Due Date</th>
+      <th>Status</th>
+      <th>Assigned To</th>
+      <th>Created By</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tasks.each do |task| %>
+      <tr>
+        <td><%= task.title %></td>
+        <td><%= task.description %></td>
+        <td><%= task.due_date %></td>
+        <td><%= task.status %></td>
+        <td><%= task.assigned_to&.email || "Unassigned" %></td>
+        <td><%= task.creator.email %></td>
+        <td>
+          <%= link_to "Show", task %>
+          <% if policy(task).update? %>
+            | <%= link_to "Edit", edit_task_path(task) %>
+          <% end %>
+          <% if policy(task).destroy? %>
+            | <%= link_to "Delete", task, data: { turbo_method: :delete, confirm: "Are you sure?" } %>
+          <% end %>
+          <% if policy(task).mark_complete? && task.pending? %>
+            | <%= button_to "Mark Complete", mark_complete_task_path(task), method: :patch %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
 <% if policy(Task).create? %>
   <%= link_to "New Task", new_task_path %>
 <% end %>
-
-<ul>
-  <% @tasks.each do |task| %>
-    <li>
-      <%= link_to task.title, task %>
-      — due <%= task.due_date %>
-      — status: <%= task.status %>
-    </li>
-  <% end %>
-</ul>

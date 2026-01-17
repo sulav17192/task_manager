@@ -1,0 +1,17 @@
+<%= form_with(model: task, local: true) do |f| %>
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+
+  <%= f.label :description %>
+  <%= f.text_area :description %>
+
+  <%= f.label :due_date %>
+  <%= f.date_field :due_date %>
+
+  <% if current_user.admin? || current_user.manager? %>
+    <%= f.label :assigned_to_id, "Assign to" %>
+    <%= f.collection_select :assigned_to_id, User.where(role: :member), :id, :email %>
+  <% end %>
+
+  <%= f.submit "Create Task" %>
+<% end %>
