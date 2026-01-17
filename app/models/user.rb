@@ -7,6 +7,7 @@ class User < ApplicationRecord
   enum :role, { admin: 0, manager: 1, member: 2 }, default: :member
 
   validates :first_name, :last_name, presence: true
+  validates :invitation_token, uniqueness: true, allow_nil: true
 
   has_many :created_tasks,
            class_name: "Task",
