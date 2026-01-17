@@ -19,7 +19,9 @@ class TasksController < ApplicationController
     @task = Task.new(task_params.merge(creator: current_user))
     authorize @task
     if @task.save
-      redirect_to @task, notice: "Task created successfully."
+      TaskMailer.task_assigned(@task).deliver_later if @task.assigned_to.present?
+
+      redirect_to @task, notice: "Task created successfully. Email notification queued."
     else
       render :new, status: :unprocessable_entity
     end
