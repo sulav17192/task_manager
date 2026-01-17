@@ -18,7 +18,7 @@ class TaskPolicy < ApplicationPolicy
   end
 
   def update?
-    user.admin? || user.manager? || record.assigned_to == user
+    user.admin? || user.manager?
   end
 
   def destroy?
