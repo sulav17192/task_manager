@@ -1,6 +1,43 @@
-<h1>Admin User Management</h1>
-<ul>
-  <% @users.each do |u| %>
-    <li><%= u.full_name %> — <%= u.role %></li>
-  <% end %>
-</ul>
+<div class="container">
+  <h1 class="mb-4">Admin User Management</h1>
+
+  <table class="table table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Change Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user.full_name %></td>
+          <td><%= user.email %></td>
+          <td>
+            <% case user.role %>
+            <% when "admin" %>
+              <span class="badge bg-danger">Admin</span>
+            <% when "manager" %>
+              <span class="badge bg-primary">Manager</span>
+            <% else %>
+              <span class="badge bg-secondary">Member</span>
+            <% end %>
+          </td>
+          <td>
+            <%= form_with(model: [:admin, user], method: :patch, local: true) do |f| %>
+              <%= f.select :role, User.roles.keys.map { |r| [r.titleize, r] }, {}, class: "form-select" %>
+              <%= f.submit "Update", class: "btn btn-sm btn-primary mt-1" %>
+            <% end %>
+          </td>
+          <td>
+            <%= link_to "Edit", edit_admin_user_path(user), class: "btn btn-sm btn-secondary" %>
+            <%= link_to "Delete", admin_user_path(user), data: { turbo_method: :delete, confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
