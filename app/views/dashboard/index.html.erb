@@ -1,13 +1,6 @@
-<h1>Dashboard</h1>
-
-<p>Total tasks: <%= @total_tasks %></p>
-<p>Completed tasks: <%= @completed_tasks %></p>
-<p>Pending tasks: <%= @pending_tasks %></p>
-<p>Overdue tasks: <%= @overdue_tasks %></p>
-
-<h2>Your Tasks</h2>
-<table>
-  <thead>
+<h2 class="mt-4">Your Tasks</h2>
+<table class="table table-striped table-hover">
+  <thead class="table-dark">
     <tr>
       <th>Title</th>
       <th>Due Date</th>
@@ -20,7 +13,13 @@
       <tr>
         <td><%= task.title %></td>
         <td><%= task.due_date %></td>
-        <td><%= task.status %></td>
+        <td>
+          <% if task.completed? %>
+            <span class="badge bg-success">Completed</span>
+          <% else %>
+            <span class="badge bg-warning text-dark">Pending</span>
+          <% end %>
+        </td>
         <td><%= task.assigned_to&.email || "Unassigned" %></td>
       </tr>
     <% end %>
