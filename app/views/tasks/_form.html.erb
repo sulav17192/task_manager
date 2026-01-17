@@ -25,12 +25,12 @@
     <%= f.date_field :due_date, class: "form-control" %>
   </div>
 
-  <% if current_user.admin? || current_user.manager? %>
-    <div class="mb-3">
-      <%= f.label :assigned_to_id, "Assign to", class: "form-label" %>
-      <%= f.collection_select :assigned_to_id, User.where(role: :member), :id, :email, {}, { class: "form-select" } %>
-    </div>
+  <% if current_user.admin? %>
+    <%= f.collection_select :assigned_to_id, User.where(role: [:manager, :member]), :id, :full_name, { prompt: "Select assignee" }, class: "form-select" %>
+  <% elsif current_user.manager? %>
+    <%= f.collection_select :assigned_to_id, User.where(role: :member), :id, :full_name, { prompt: "Select assignee" }, class: "form-select" %>
   <% end %>
+
 
   <%= f.submit task.new_record? ? "Create Task" : "Update Task", class: "btn btn-primary" %>
 <% end %>

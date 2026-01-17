@@ -6,7 +6,7 @@ class Task < ApplicationRecord
 
   validates :title, :description, :due_date, presence: true
   validate :due_date_in_future
-  validate :assigned_to_is_member, if: -> { assigned_to_id.present? }
+  validate :assigned_to_must_be_valid, if: -> { assigned_to_id.present? }
 
   private
 
@@ -15,7 +15,17 @@ class Task < ApplicationRecord
     errors.add(:due_date, "must be in the future") if due_date <= Date.today
   end
 
-  def assigned_to_is_member
-    errors.add(:assigned_to, "must be a member") unless assigned_to&.member?
+  def assigned_to_must_be_valid
+    return unless assigned_to.present?
+
+    if creator.admin?
+      unless assigned_to.manager? || assigned_to.member?
+        errors.add(:assigned_to, "must be a manager or member")
+      end
+    elsif creator.manager?
+      unless assigned_to.member?
+        errors.add(:assigned_to, "must be a member")
+      end
+    end
   end
 end
