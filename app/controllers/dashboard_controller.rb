@@ -2,15 +2,18 @@ class DashboardController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @tasks =
-      if current_user.admin?
-        Task.order(due_date: :asc)
-      elsif current_user.manager?
-        Task.where(creator: current_user)
-            .or(Task.where(assigned_to: current_user))
-            .order(due_date: :asc)
-      else
-        Task.where(assigned_to: current_user).order(due_date: :asc)
-      end
+    if current_user.admin? || current_user.manager?
+      @tasks = Task.all
+      @total_tasks = @tasks.count
+      @completed_tasks = @tasks.completed.count
+      @pending_tasks = @tasks.pending.count
+      @overdue_tasks = @tasks.where("due_date < ?", Date.today).count
+    else
+      @tasks = Task.where(assigned_to: current_user)
+      @total_tasks = @tasks.count
+      @completed_tasks = @tasks.completed.count
+      @pending_tasks = @tasks.pending.count
+      @overdue_tasks = @tasks.where("due_date < ?", Date.today).count
+    end
   end
 end

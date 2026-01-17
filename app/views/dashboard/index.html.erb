@@ -1,10 +1,28 @@
-<h2>My Dashboard</h2>
+<h1>Dashboard</h1>
 
-<ul>
-  <% @tasks.each do |task| %>
-    <li>
-      <strong><%= task.title %></strong> — due <%= task.due_date %>
-      (status: <%= task.status %>)
-    </li>
-  <% end %>
-</ul>
+<p>Total tasks: <%= @total_tasks %></p>
+<p>Completed tasks: <%= @completed_tasks %></p>
+<p>Pending tasks: <%= @pending_tasks %></p>
+<p>Overdue tasks: <%= @overdue_tasks %></p>
+
+<h2>Your Tasks</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Due Date</th>
+      <th>Status</th>
+      <th>Assigned To</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tasks.each do |task| %>
+      <tr>
+        <td><%= task.title %></td>
+        <td><%= task.due_date %></td>
+        <td><%= task.status %></td>
+        <td><%= task.assigned_to&.email || "Unassigned" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
