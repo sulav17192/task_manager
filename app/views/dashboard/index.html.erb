@@ -23,5 +23,9 @@
         <td><%= task.assigned_to&.email || "Unassigned" %></td>
       </tr>
     <% end %>
+    <h2>Admin Dashboard</h2>
+
+      <%= link_to "Invite Manager", invite_manager_admin_managers_path, method: :get, class: "btn btn-primary" %>
+
   </tbody>
 </table>
