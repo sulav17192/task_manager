@@ -5,7 +5,12 @@ module Admin
 
     def index
       authorize [:admin, User]
-      @users = User.all
+
+      if params[:query].present?
+        @users = User.where("email LIKE ?", "%#{params[:query]}%").order(created_at: :desc)
+      else
+        @users = User.order(created_at: :desc)
+      end
     end
 
     def show
