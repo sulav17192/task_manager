@@ -1,0 +1,6 @@
+<h2>Invite a New Manager</h2>
+
+<%= form_with url: invite_manager_admin_managers_path, method: :post do %>
+  <%= email_field_tag :email, nil, placeholder: "Manager email" %>
+  <%= submit_tag "Send Invitation", class: "btn btn-primary" %>
+<% end %>

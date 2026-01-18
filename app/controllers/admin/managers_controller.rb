@@ -1,7 +1,10 @@
 module Admin
   class ManagersController < ApplicationController
-    before_action :authenticate_user!   # ensure someone is logged in
-    before_action :ensure_admin!        # ensure only admins can invite
+    before_action :authenticate_user! 
+    before_action :ensure_admin!       
+
+    def new_invite
+    end
 
     def invite_manager
       @manager = User.new(email: params[:email], role: :manager)
